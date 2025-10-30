@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>梦幻粉色 mac 小窗口</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffe6f2, #f5e0ff);
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft Yahei', sans-serif;
+    }
+
+    .mac-window {
+      width: 220px;
+      background: #fff0f6;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(255, 105, 180, 0.25);
+      overflow: hidden;
+      position: absolute;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      animation: fadeIn 0.6s forwards;
+      border: 1px solid #ffd6e7;
+    }
+
+    .titlebar {
+      height: 24px;
+      background: linear-gradient(90deg, #ffb6c1, #ffc0cb);
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      gap: 5px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      box-shadow: 0 0 2px rgba(0,0,0,0.1);
+    }
+
+    .red { background: #ff8fa3; }
+    .yellow { background: #ffd180; }
+    .green { background: #b2f2bb; }
+
+    .content {
+      padding: 14px;
+      text-align: center;
+      font-size: 14px;
+      color: #d63384;
+      line-height: 1.6;
+      font-weight: 500;
+      word-break: break-word;
+      background: rgba(255,255,255,0.6);
+      border-top: 1px solid #ffd6e7;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.6) translateY(30px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.6) translateY(30px); }
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const name = "佘雅婷"; // 可修改名字变量
+
+    function buildMessages(n) {
+      return [
+        '你要天天开心~' + n + 'ε٩(๑> ₃ <)۶з',
+        '要天天快乐~' + n + '(´▽`ʃ♡ƪ)',
+        '注意保暖~' + n + '(๑•̀ㅂ•́)و✧',
+        '要想我~' + n + '(￣ε(#￣)☆',
+        n + '我爱你(ﾉ>ω<)ﾉ',
+        '你是我的宝~我是你的宝~ξ( ✿＞◡❛)',
+        '爱你（づ￣3￣）づ╭❤～'
+      ];
+    }
+
+    const messages = buildMessages(name);
+
+    function createWindow() {
+      const div = document.createElement('div');
+      div.className = 'mac-window';
+
+      const text = messages[Math.floor(Math.random() * messages.length)];
+
+      const winW = 220;
+      const winH = 100;
+      const x = Math.random() * Math.max(0, (window.innerWidth - winW));
+      const y = Math.random() * Math.max(0, (window.innerHeight - winH));
+      div.style.left = Math.round(x) + 'px';
+      div.style.top = Math.round(y) + 'px';
+
+      const titlebar = document.createElement('div');
+      titlebar.className = 'titlebar';
+      const r = document.createElement('div'); r.className = 'dot red';
+      const yel = document.createElement('div'); yel.className = 'dot yellow';
+      const g = document.createElement('div'); g.className = 'dot green';
+      titlebar.appendChild(r); titlebar.appendChild(yel); titlebar.appendChild(g);
+
+      const content = document.createElement('div');
+      content.className = 'content';
+      content.textContent = text;
+
+      div.appendChild(titlebar);
+      div.appendChild(content);
+
+      document.body.appendChild(div);
+
+      requestAnimationFrame(() => {
+        div.style.opacity = '1';
+        div.style.transform = 'scale(1)';
+      });
+
+      const stay = 9000 + Math.floor(Math.random() * 3000);
+      setTimeout(() => {
+        div.style.animation = 'fadeOut 0.6s forwards';
+        setTimeout(() => { if (div && div.parentNode) div.parentNode.removeChild(div); }, 600);
+      }, stay);
+    }
+
+    // 每次生成多个窗口
+    function burstWindows() {
+      const count = 6 + Math.floor(Math.random() * 6);
+      for (let i = 0; i < count; i++) {
+        setTimeout(createWindow, i * 150);
+      }
+    }
+
+    // 持续喷射效果
+    window._popInterval = setInterval(burstWindows, 700);
+
+    // 初始化一次
+    burstWindows();
+  </script>
+</body>
+</html>
